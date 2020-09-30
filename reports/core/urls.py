@@ -5,6 +5,7 @@ from .views import *
 urlpatterns = [
     path('', HomePage.as_view(), name='index_page'),
     path('entities/', MyEntities.as_view(), name='my_entities'),
+    path('greetings/', greetings, name='greetings'),
     path('statistics/', MyStatistics.as_view(), name='my_statistics'),
     path('info/', view_info, name='info'),
     path('create/', CreateEntity.as_view(), name='create_entity'),

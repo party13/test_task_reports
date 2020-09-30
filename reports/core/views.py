@@ -144,6 +144,13 @@ def delete_entity(request):
             entity.delete()
     return redirect('my_entities')
 
+
+def greetings(request):
+    template = 'greetings.html'
+    # user = request.user
+    return render(request, template)
+
+
 def ajax_response(request):
     data = {'html': '<>render smth' , 'success': True}
     return HttpResponse(json.dumps(data), content_type='application/json')
