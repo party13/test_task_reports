@@ -1,0 +1,48 @@
+{% extends 'base.html'  %}
+
+{% load static %}
+{% block head %}
+{% endblock %}
+
+{% block title %}
+    Task info
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row" style="margin-bottom: 25px;">
+      <div class="col md-6 offset-2">
+        <h3>Basic information</h3>
+        <p> This app were created as a test task. The main requirements were as follows</p>
+        <li>Anonymous user can only access README page  and login or registration forms</li>
+        <li>To create an entry user provide such data</li>
+          <ul><li>date</li>
+              <li>distance </li>
+              <li>duration</li></ul>
+        <li>When user see list of entries, application also shows average speed</li>
+        <li>User should be able to filter list of entries by date range</li>
+        <li>There should be a page with per week statistics for last year - week number, total amount of entries, total distance, total duration and average speed</li>
+        <li>Minimal front-end design required</li>
+          <hr>
+          <p>
+              Sorting by speed, duration and distance was added, but still not operate well.
+              Will be fixed later :)
+          </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-6 offset-2">
+          <h4>Info</h4>
+          Source code: <a href="#">link</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col md-4 offset-2">
+          Author: <a href="#">Ustinov Dmitriy</a>
+      </div>
+      <div class="col-sm">
+          Date: 30 Sep, 2020.
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+{% load static %}
+<nav class="navbar navbar-dark bg-dark">
+  <span class="navbar-brand mt-1">
+      <div class="logo pull-left">
+          <a href="{% url 'index_page' %}">
+
+              <img src="{% static '/img/keyua-logo-white.png' %}"></a>
+      </div>
+  </span>
+</nav>
+<div class="login-box" >
+    <div class="login-box-body">
+        <p class="login-box-msg">
+            {% if msg %}
+                <span {% if msg_color %}style="color: {{ msg_color }};"{% else %}style="color: #777;"{% endif %}>
+                    {{ msg | safe }}
+                </span>
+            {% else %}
+                <span>
+                   Please provide User name and Password to register
+                </span>
+            {% endif %}
+        </p>
+
+        <br />
+        <form method="post" action="">
+
+           {% csrf_token %}
+
+            {{ form }}
+            <div class="flex space-between bottom-block">
+                <button class="btn btn-primary" name="login" type="submit">REGISTER</button>
+            </div>
+        </form>
+    </div>
+    <!-- /.login-box-body -->
+</div>
+{% endblock %}

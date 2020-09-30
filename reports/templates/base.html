@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/styles.css' %} ">
+    <link rel='icon' href="https://keyua.org/static/images/favicon.ico" type='image/x-icon' >
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="{% static  'css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static  'css/daterangepicker.css' %}">
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>-->
+
+        {% block stylesheets %}{% endblock stylesheets %}
+
+    {% block head %}
+
+    {% endblock %}
+    <script></script>
+    <title>Reports - {% block title %}{% endblock %} | KeyUA test task</title>
+
+</head>
+
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+  <div class="navbar-nav navbar_menu">
+    <span class="navbar-brand mt-1">
+              <div class="logo pull-left">
+                  <a href="{% url 'index_page' %}">
+        <!--          <a href="https://keyua.org/">-->
+                      <img src="{% static '/img/keyua-logo-white.png' %}">
+                  </a>
+              </div>
+          </span>
+    {% if user.is_authenticated %}
+      <div class="nav-item active">
+        <a class="nav-link" href="{% url 'my_entities' %}">My reports</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" href="{% url 'my_statistics' %}">Statistics</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" href="{% url 'info' %}">Task info</a>
+      </div>
+  </div>
+  <div class="pull-right">
+        <div class="dropdown show">
+          <span class="dropdown-toggle" role="button" id="dropdownMenuLink"
+                style="color: white;"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             {{user.username }}
+          </span>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+          </div>
+        </div>
+    </div>
+    {% else %}
+  </div>
+  <div class="pull-right">
+      <a href="{% url 'register' %}" style="padding: 10px">Register</a>
+      <a href="{% url 'login_url' %}" style="padding: 10px">Log in</a>
+  </div>
+    {% endif %}
+</nav>
+
+{% block message %}
+  {% if message %}
+    <div class="message">
+        <div> {{ message }}</div>
+        <button type="button" class="btn btn-success">close</button>
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+    <div class="container mt-1">
+        {% block content %}
+            Мейн контент
+        {% endblock %}
+    </div>
+
+{% include 'footer.html' %}
+</body>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+        $('div.nav-item').removeClass('active')
+        links =  window.location.pathname.split('/');
+        link = '/' + links[1] ;
+        $('a.nav-link[href^="' + link + '"]').closest('div.nav-item').addClass('active')
+    });
+  </script>
+  <script src="{% static 'js/moment.js' %}"></script>
+  <script src="{% static 'js/daterangepicker.js' %}"></script>
+  {% block javascripts %}{% endblock %}
+</html>

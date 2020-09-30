@@ -1,0 +1,39 @@
+{% extends 'base.html'  %}
+
+{% load static %}
+{% block head %}
+{% endblock %}
+
+{% block title %}
+    My Statistics
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" style="width: 720px; margin-top: 45px;" >
+        <div class="col-sm flex">Year <b>2020</b></div>
+        <div class="col-sm flex"><a href="#">Chart</a></div>
+        <div class="col-sm flex"><a href="#">Export</a></div>
+        <div class="col-sm flex"><a href="#">Print</a></div>
+        <div class="col-sm flex"><a href="#">Share</a></div>
+    </div>
+    <div class="row " style="width: 720px; margin-top: 45px;">
+        <div class="col-sm flex">&nbsp;</div>
+        <div class="col-sm flex">count</div>
+        <div class="col-sm flex">duration</div>
+        <div class="col-sm flex">distance</div>
+        <div class="col-sm flex">Speed</div>
+    </div>
+    {% for w in weeks %}
+      <div class="row entity_row">
+          <div class="col-sm flex">Week {{ w.week_number }}</div>
+          <div class="col-sm flex">{{ w.count }}</div>
+          <div class="col-sm flex">{{ w.duration }}</div>
+          <div class="col-sm flex">{{ w.distance }}</div>
+          <div class="col-sm flex">{{ w.speed }}</div>
+      </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

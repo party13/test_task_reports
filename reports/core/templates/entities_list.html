@@ -1,0 +1,237 @@
+{% extends 'base.html'  %}
+
+{% load static %}
+{% block head %}
+{% endblock %}
+
+{% block title %}
+    My entities
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-end" style="margin-bottom: 25px;">
+      <div class="col-3">
+        <button class="create-new btn btn-success " data-toggle="modal" data-target="#create_form">
+            <h4>Create New Entity</h4>
+        </button>
+      </div>
+    </div>
+    <div class="row filters-row">
+        <div class="col-sm">
+            <span>Date period:
+                <button id="daterange" class="btn">
+                    {% if dt_from %}
+                    {{ dt_from }} - {{ dt_to }}
+                    {% else %}
+                        All dates
+                    {% endif %}
+                </button>
+                <input type="hidden" class="input-group-addon form-control" id="dt_from" readonly name="dt_from" value="{{ dt_from }}" style="width: 94px;">
+                <input type="hidden" class="input-group-addon form-control" id="dt_to" readonly name="dt_to" value="{{ dt_to }}" style="width: 94px;">
+            </span>
+
+        </div>
+        <div class="col-sm"> Total: {{ count }} </div>
+        <div class="col-sm"> Show: {{paginator.per_page}}
+        </div>
+        <div class="col-sm">
+            {% if is_paginated %}
+            <ul class="pagination">
+                {% if paginator.has_previous %}
+                  <li class="page-item"><a href="?page={{ paginator.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                  {% if paginator.number == i %}
+                    <li class="page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li class="page-item"><a href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if paginator.has_next %}
+                  <li class="page-item"><a href="?page={{ paginator.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class="page-item disabled"><span>&raquo;</span></li>
+                {% endif %}
+              </ul>
+            {% endif %}
+        </div>
+    </div>
+    <div class="box">
+      <div class="box-header">
+
+      </div>
+      <div class="box-body">
+            <div class="row" style="width: 700px;">
+              <div class="col-sm flex">date
+                <span><input class="apple-switch js-sort" js-sort="date"
+                         type="checkbox"{% if sort_date %}checked{% endif %}></span>
+              </div>
+              <div class="col-sm flex">duration
+                <span><input class="apple-switch js-sort" js-sort="duration"
+                         type="checkbox"{% if sort_duration %}checked{% endif %}></span>
+              </div>
+              <div class="col-sm flex">distance
+                <span><input class="apple-switch js-sort" js-sort="distance"
+                         type="checkbox"{% if sort_distance %}checked{% endif %}></span>
+              </div>
+              <div class="col-sm flex">speed
+                <span><input class="apple-switch js-sort" js-sort="speed"
+                         type="checkbox"{% if sort_speed %}checked{% endif %}></span>
+              </div>
+            </div>
+          {% for e in entities %}
+          <div class="row entity_row">
+              <div class="col-sm flex">{{e.date}}</div>
+              <div class="col-sm flex">{{e.duration}}</div>
+              <div class="col-sm flex">{{e.distance}}</div>
+              <div class="col-sm flex">{{e.speed}}</div>
+              <div class="row_action">
+                  <button class="badge badge-secondary action-delete js-delete-entity"
+                          js-id="{{e.id}}" js-info="{{e.date}} , duration : {{e.duration}}, distance: {{e.distance}}"
+                          title="Delete this entity" data-toggle="modal" data-target="#delete_form">
+                      <i class="fa fa-remove"></i> delete
+                  </button>
+              </div>
+
+          </div>
+
+          {% endfor %}
+
+      </div>
+  </div>
+
+  <div id="create_form" class="modal fade">
+      <div class="modal-dialog" >
+        <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title" style="display: inline;"> Create new entity</h3>
+                 <span class="inline" id="success_create_message" style="color: green; display: none"></span>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+           </div>
+           <div class="modal-body" id="entity_form">
+               <form id="new_entity" js-link="{% url 'create_entity' %}">
+                   {% csrf_token %}
+                   <input type="hidden" name="user_id" value="{{ user.id }}">
+                   <input type="hidden" name="date" id="date_value" value="{{ today }}">
+                   <div class="form-group">
+                     <div class="row">
+                       <div class="col-sm form-label"> Date:</div>
+                       <div class="col-sm">
+                           <span id="entity-form-date"
+                                 style="border: solid #7A7A7A 1px;"
+                                 class="btn btn-default">{{ today }}</span>
+                           <span class="form-message" name="date-message"></span>
+                       </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-sm form-label"> Distance:</div>
+                        <div class="col-sm">
+                            <input name="distance" class="js-input-control">
+                            <span class="form-message" name="distance-message"></span>
+                        </div>
+
+                     </div>
+                     <div class="row">
+                        <div class="col-sm form-label"> Duration:</div>
+                        <div class="col-sm">
+                            <input name="duration" class="js-input-control">
+                            <span class="form-message" name="duration-message"></span>
+                        </div>
+                     </div>
+                     <div class="row hidden" id="average_counted_speed">
+                        <div class="col-sm form-label "> Average speed:</div>
+                         <div class="col-sm"><span></span>
+                        </div>
+                     </div>
+                   </div>
+               </form>
+
+                   <button class="btn btn-success" id="submit_create_action">Create</button>
+                   <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="delete_form" class="modal fade">
+      <div class="modal-dialog" >
+        <div class="modal-content">
+           <div class="modal-header">
+               <h3 class="modal-title" style="display: inline;"> Are you sure to delete this entity?</h3>
+                 <span class="inline" id="success_delete_message" style="color: green; display: none"></span>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span></button>
+           </div>
+           <div class="modal-body" id="delete_entity">
+               <span id="to_delete_info"></span>
+               <form id="del_entity" action="{% url 'delete_entity' %}" method="post">
+                   {% csrf_token %}
+                   <input name="entity_id" id="delete_entity_input" type="hidden" value="">
+                   <button type="submit" class="btn btn-danger"> Delete</button>
+                   <button type="button" data-dismiss="modal" class="btn btn-default">Cancel</button>
+
+               </form>
+           </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/actions.js' %}"></script>
+    <script >
+$('#daterange').daterangepicker({
+    startDate: moment().startOf('day'),
+    endDate: moment().endOf('day'),
+    minDate: moment().subtract(365, 'days'),
+    maxDate: moment(),
+    dateLimit: true,
+    autoApply: true,
+    singleDatePicker: false,
+    showDropdowns: false,
+    showWeekNumbers: false,
+    showISOWeekNumbers: false,
+    showCustomRangeLabel: true,
+    linkedCalendars: true,
+    autoUpdateInput: true,
+    alwaysShowCalendars: false,
+    ranges   : {
+      'Yesterday'   : [moment().subtract(1, 'days'), moment()],
+      'Last 3 Days' : [moment().subtract(2, 'days'), moment()],
+      'Last 5 Days' : [moment().subtract(4, 'days'), moment()],
+      'Last Week'   : [moment().subtract(6, 'days'), moment()],
+      'Last 2 Weeks': [moment().subtract(13, 'days'), moment()],
+      'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+    },
+    startDate: moment(){% if dt_start %}.subtract({{ dt_start }}, 'days'){% endif %},
+    endDate  : moment(){% if dt_end %}.subtract({{ dt_end }}, 'days'){% endif %}
+  }, function (start, end) {
+    debug = true;
+    dt_from = $("#dt_from")[0];
+    dt_to = $("#dt_to")[0];
+    if (debug==true) {
+      console.log('============');
+      console.log('dt_from:', dt_from.value);
+      console.log('dt_from_new:', start.format('YYYY-MM-DD'));
+    };
+    dt_from.value = start.format('YYYY-MM-DD');
+    if (debug==true) {
+      console.log('------------');
+      console.log('dt_to:', dt_to.value);
+      console.log('dt_to_new:', end.format('YYYY-MM-DD'));
+      console.log('============');
+    };
+    dt_to.value = end.format('YYYY-MM-DD');
+    if (true){
+       lnk = window.location.pathname + '?dt_from='+start.format('YYYY-MM-DD')+'&dt_to='+end.format('YYYY-MM-DD')
+       window.location.href = lnk;
+    }
+    // window.alert('You chose: ' + start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+  });
+  </script>
+{% endblock %}
