@@ -37,14 +37,18 @@ class MyEntities(View):
 
             if dt_from and dt_to:
                 fmt = '%Y-%m-%d'
-                dt_from = datetime.strptime(dt_from, fmt)
-                dt_to = datetime.strptime(dt_to, fmt)
-                if dt_from < dt_to:
-                    dt1 = date(year=dt_from.year, month=dt_from.month, day=dt_from.day)
-                    dt2 = date(year=dt_to.year, month = dt_to.month, day=dt_to.day)
-                    entities = [e for e in entities if dt1 <= e.date <= dt2]
-                    context['dt_from'] = dt_from.strftime('%d %b')
-                    context['dt_to'] = dt_to.strftime('%d %b')
+                try:
+                    dt_from = datetime.strptime(dt_from, fmt)
+                    dt_to = datetime.strptime(dt_to, fmt)
+                    if dt_from <= dt_to:
+                        dt1 = date(year=dt_from.year, month=dt_from.month, day=dt_from.day)
+                        dt2 = date(year=dt_to.year, month = dt_to.month, day=dt_to.day)
+                        entities = [e for e in entities if dt1 <= e.date <= dt2]
+                        context['dt_from'] = dt_from.strftime('%d %b')
+                        context['dt_to'] = dt_to.strftime('%d %b')
+                except Exception as e:
+                    print('not valid date, {}'.format(str(e)))
+                    pass
 
             # sort by
             sort_attr = request.GET.get('sort', 'date')
@@ -59,7 +63,7 @@ class MyEntities(View):
             context['form'] = form
             context['count'] = len(entities)
             # context['entities'] = entities
-            context['today'] = date.today().strftime("%Y-%d-%m ")
+            context['today'] = date.today().strftime("%Y-%d-%m")
             context['page_number'] = int(request.GET.get('page', 1))
             context['per_page'] = int(request.GET.get('per_page', 10))
             context = prepare_pagination(context, items=entities)
@@ -70,12 +74,12 @@ class MyEntities(View):
 
 
 class CreateEntity(View):
-    def get(self, request):
-        form = CreateEntityForm
-
-        template = 'creating template.html'
-        context = {'form': form}
-        return render(request, template, context=context)
+    # def get(self, request):
+    #     form = CreateEntityForm
+    #
+    #     template = 'creating template.html'
+    #     context = {'form': form}
+    #     return render(request, template, context=context)
 
     def post(self, request):
         try:
@@ -90,7 +94,7 @@ class CreateEntity(View):
                 return HttpResponse(json.dumps({'result': True, 'details': ''}))
             else:
                 # render the form with errors
-                return HttpResponse(json.dumps({'result': False, 'details': form.errors}))
+                return HttpResponse(json.dumps({'result': False, 'details': str(form.errors)}))
         except Exception as e:
             return HttpResponse(json.dumps({'result': False, 'details': str(e)}))
 

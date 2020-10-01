@@ -69,13 +69,13 @@
                 <span><input class="apple-switch js-sort" js-sort="date"
                          type="checkbox"{% if sort_date %}checked{% endif %}></span>
               </div>
-              <div class="col-sm flex">duration
-                <span><input class="apple-switch js-sort" js-sort="duration"
-                         type="checkbox"{% if sort_duration %}checked{% endif %}></span>
-              </div>
               <div class="col-sm flex">distance
                 <span><input class="apple-switch js-sort" js-sort="distance"
                          type="checkbox"{% if sort_distance %}checked{% endif %}></span>
+              </div>
+              <div class="col-sm flex">duration
+                <span><input class="apple-switch js-sort" js-sort="duration"
+                         type="checkbox"{% if sort_duration %}checked{% endif %}></span>
               </div>
               <div class="col-sm flex">speed
                 <span><input class="apple-switch js-sort" js-sort="speed"
@@ -85,8 +85,8 @@
           {% for e in entities %}
           <div class="row entity_row">
               <div class="col-sm flex">{{e.date}}</div>
-              <div class="col-sm flex">{{e.duration}}</div>
               <div class="col-sm flex">{{e.distance}}</div>
+              <div class="col-sm flex">{{e.duration}}</div>
               <div class="col-sm flex">{{e.speed}}</div>
               <div class="row_action">
                   <button class="badge badge-secondary action-delete js-delete-entity"
@@ -147,6 +147,9 @@
                          <div class="col-sm"><span></span>
                         </div>
                      </div>
+                       <div class="row">
+                           <span id="create_form_error_message" style="color: red;"></span>
+                       </div>
                    </div>
                </form>
 
@@ -201,7 +204,7 @@ $('#daterange').daterangepicker({
     autoUpdateInput: true,
     alwaysShowCalendars: false,
     ranges   : {
-      'Yesterday'   : [moment().subtract(1, 'days'), moment()],
+      'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
       'Last 3 Days' : [moment().subtract(2, 'days'), moment()],
       'Last 5 Days' : [moment().subtract(4, 'days'), moment()],
       'Last Week'   : [moment().subtract(6, 'days'), moment()],

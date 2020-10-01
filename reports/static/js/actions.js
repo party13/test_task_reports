@@ -12,9 +12,10 @@ $(document).ready(function(){
             });
 
     $('input.js-input-control').on('input', function(){
-        dst = $('input[name="distance"]').val()
-        dur = $('input[name="duration"]').val()
-        if (dst !='' & dur !='' & dur!= 0){
+        $('#create_form_error_message').html('')
+        dst = parseInt($('input[name="distance"]').val())
+        dur = parseInt($('input[name="duration"]').val())
+        if (dst  && dur  && dur!= 0){
            speed = Math.round(100 * dst / dur) / 100
            $('#average_counted_speed').find('span').text(speed)
         } else {
@@ -25,17 +26,29 @@ $(document).ready(function(){
     $('#submit_create_action').click(function(){
         form = $('#new_entity')
         valid = true;
-        if (form.find('input[name="distance"]').val() == ''){
-            valid = false;
-            $('span.form-message[name^="distance"]').css('color', 'red')
-            .text('Fill this field first!')
-            .slideUp(500).fadeIn(500).delay(2000).fadeOut(500)
-        }
-        if (form.find('input[name="duration"]').val() == ''){
+//        if (form.find('input[name="distance"]').val() == ''){
+//            valid = false;
+//            $('span.form-message[name^="distance"]').css('color', 'red')
+//            .text('Fill this field first!')
+//            .slideUp(500).fadeIn(500).delay(2000).fadeOut(500)
+//        }
+//        if (form.find('input[name="duration"]').val() == ''){
+//            valid = false;
+//            $('span.form-message[name^="duration"]').css('color', 'red')
+//            .text('Fill this field first!')
+//            .fadeIn(500).delay(2000).fadeOut(500)
+//        }
+        if (!parseInt(form.find('input[name="duration"]').val())){
             valid = false;
             $('span.form-message[name^="duration"]').css('color', 'red')
-            .text('Fill this field first!')
-            .slideUp(500).fadeIn(500).delay(2000).fadeOut(500)
+            .text('Incorrect duration!')
+            .fadeIn(500).delay(2000).fadeOut(500)
+        }
+        if (!parseInt(form.find('input[name="distance"]').val())){
+            valid = false;
+            $('span.form-message[name^="distance"]').css('color', 'red')
+            .text('Incorrect distance!')
+            .fadeIn(500).delay(2000).fadeOut(500)
         }
         if (valid){
            createNewEntity(form)
@@ -96,11 +109,12 @@ function createNewEntity(form){
                      1000)
             }
             else {
-                console.log(response.details);
+                errs = response.details
+                $('#create_form_error_message').html(errs)
+//                console.log(errs);
             }
         })
 }
-
 
 
 function defineNewUrl(url, key){
@@ -118,9 +132,6 @@ $(document).on('click', '[id^="sort-by"]', function(){
     window.location.href = url;
 })
 
-$(document).on('click', '#create_account_btn', function(){
-    loadAccountForm()
-})
 
 function ChangePassword(){
     $('input[id^="id"]').each(function(){if ($(this).val()=='') {valid=false;} else{valid=true;}})
