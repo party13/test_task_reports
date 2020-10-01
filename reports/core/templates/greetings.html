@@ -13,7 +13,7 @@
 <h3>Welcome!</h3>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-6 offset-2">
+    <div class="col-md-8 offset-2">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -22,19 +22,29 @@
   </ol>
   <div class="carousel-inner">
     <div class="carousel-item active">
-              <div>
-                <h3>View the full functionality!</h3>
-            <a href="{% url 'login_url' %}"><button class="btn btn-success">
-              Log in</button></a> or <a href="{% url 'register' %}"><button class="btn btn-success"> register</button></a> !
-        </div>
+      <div style="height:90px">
+          <div>
+             <h3>View the full functionality!</h3></div>
+          <div class="col col-md-8 offset-2">
+              Press <a href="{% url 'login_url' %}"><button class="btn btn-success">
+                Log in</button></a> or <a href="{% url 'register' %}"><button class="btn btn-success"> register</button></a> !
+          </div>
+      </div>
+
       <img class="d-block w-100" src="{% static 'img/slide1.png' %}" alt="First slide">    </div>
     <div class="carousel-item">
+      <div style="height:90px">
       <div ><h3>Manage your entities!</h3></div>
+        <span> Create, delete , view! </span>
+      </div>
       <img class="d-block w-100" src="{% static 'img/slide4.png' %}" alt="Second slide">
 
     </div>
     <div class="carousel-item">
+      <div style="height:90px">
       <div ><h3> Discover your statistics!</h3></div>
+        <span>Weekly, dayly, custom range!</span>
+      </div>
       <img class="d-block w-100" src="{% static 'img/slide3.png' %}" alt="Third slide">
 
     </div>

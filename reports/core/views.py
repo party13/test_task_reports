@@ -1,6 +1,6 @@
 import json
 import operator
-from datetime import datetime
+from datetime import datetime, timedelta, date
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from .models import Entity
@@ -36,10 +36,9 @@ class MyEntities(View):
             dt_to = request.GET.get('dt_to')
 
             if dt_from and dt_to:
-                fmt = '%Y-%m-%d'
                 try:
-                    dt_from = datetime.strptime(dt_from, fmt)
-                    dt_to = datetime.strptime(dt_to, fmt)
+                    dt_from = datetime.strptime(dt_from, FMT)
+                    dt_to = datetime.strptime(dt_to, FMT)
                     if dt_from <= dt_to:
                         dt1 = date(year=dt_from.year, month=dt_from.month, day=dt_from.day)
                         dt2 = date(year=dt_to.year, month = dt_to.month, day=dt_to.day)
@@ -63,7 +62,7 @@ class MyEntities(View):
             context['form'] = form
             context['count'] = len(entities)
             # context['entities'] = entities
-            context['today'] = date.today().strftime("%Y-%d-%m")
+            context['today'] = date.today().strftime(FMT)      # "%Y-%m-%d"
             context['page_number'] = int(request.GET.get('page', 1))
             context['per_page'] = int(request.GET.get('per_page', 10))
             context = prepare_pagination(context, items=entities)
@@ -74,13 +73,6 @@ class MyEntities(View):
 
 
 class CreateEntity(View):
-    # def get(self, request):
-    #     form = CreateEntityForm
-    #
-    #     template = 'creating template.html'
-    #     context = {'form': form}
-    #     return render(request, template, context=context)
-
     def post(self, request):
         try:
             form = CreateEntityForm(request.POST)
@@ -91,6 +83,7 @@ class CreateEntity(View):
                 distance = form.data.get('distance')
                 entity = Entity(user_id=user_id, date=date,distance=distance, duration=duration)
                 entity.save()
+                print(entity.id)
                 return HttpResponse(json.dumps({'result': True, 'details': ''}))
             else:
                 # render the form with errors
@@ -123,12 +116,14 @@ class MyStatistics(View):
                 speed = distance / duration
             else:
                 count = distance = duration = speed = 0
+            week_start, week_end = week_ranges(week_number)
             weeks.append({'week_number': week_number,
                           'count': count,
                           'distance': distance,
                           'duration': duration,
+                          'week_start': week_start,
+                          'week_end': week_end,
                           'speed': round(speed, 3)})
-
             context['weeks'] = weeks
         return render(request, MyStatistics.template, context=context)
 

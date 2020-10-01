@@ -1,7 +1,16 @@
 import random
-from datetime import date
+from datetime import date, timedelta
 # from .models import Entity
 from django.core.paginator import Paginator
+
+
+FMT = '%Y-%m-%d'
+
+def week_ranges(number):
+    year = date.today().isocalendar()[0]
+    dt0 = date(day=1, month=1, year=year)
+    dt0 = dt0 - timedelta(days=dt0.isoweekday())
+    return ((dt0 + timedelta(days=(number-1) * 7+1)).strftime(FMT), (dt0 + timedelta(days=number*7)).strftime(FMT))
 
 
 def prepare_pagination(context, items):

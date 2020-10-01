@@ -17,49 +17,51 @@
         </button>
       </div>
     </div>
-    <div class="row filters-row">
-        <div class="col-sm">
-            <span>Date period:
-                <button id="daterange" class="btn">
-                    {% if dt_from %}
-                    {{ dt_from }} - {{ dt_to }}
-                    {% else %}
-                        All dates
-                    {% endif %}
-                </button>
-                <input type="hidden" class="input-group-addon form-control" id="dt_from" readonly name="dt_from" value="{{ dt_from }}" style="width: 94px;">
-                <input type="hidden" class="input-group-addon form-control" id="dt_to" readonly name="dt_to" value="{{ dt_to }}" style="width: 94px;">
-            </span>
+    <div class="row">
+      <div class="col-md-10 offset-1">
+        <div class="row filters-row">
+            <div class="col-sm">
+                <span>Date period:
+                    <button id="daterange" class="btn">
+                        {% if dt_from %}
+                        {{ dt_from }} - {{ dt_to }}
+                        {% else %}
+                            All dates
+                        {% endif %}
+                    </button>
+                    <input type="hidden" class="input-group-addon form-control" id="dt_from" readonly name="dt_from" value="{{ dt_from }}" style="width: 94px;">
+                    <input type="hidden" class="input-group-addon form-control" id="dt_to" readonly name="dt_to" value="{{ dt_to }}" style="width: 94px;">
+                </span>
 
-        </div>
-        <div class="col-sm"> Total: {{ count }} </div>
-        <div class="col-sm"> Show: {{paginator.per_page}}
-        </div>
-        <div class="col-sm">
-            {% if is_paginated %}
-            <ul class="pagination">
-                {% if paginator.has_previous %}
-                  <li class="page-item"><a href="?page={{ paginator.previous_page_number }}">&laquo;</a></li>
-                {% else %}
-                  <li class="page-item disabled"><span>&laquo;</span></li>
+            </div>
+            <div class="col-sm"> Total: {{ count }} </div>
+            <div class="col-sm"> Show: {{paginator.per_page}}
+            </div>
+            <div class="col-sm">
+                {% if is_paginated %}
+                <ul class="pagination">
+                    {% if paginator.has_previous %}
+                      <li class="page-item"><a href="?page={{ paginator.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                      {% if paginator.number == i %}
+                        <li class="page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                      {% else %}
+                        <li class="page-item"><a href="?page={{ i }}">{{ i }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if paginator.has_next %}
+                      <li class="page-item"><a href="?page={{ paginator.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                      <li class="page-item disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                  </ul>
                 {% endif %}
-                {% for i in paginator.page_range %}
-                  {% if paginator.number == i %}
-                    <li class="page-item active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-                  {% else %}
-                    <li class="page-item"><a href="?page={{ i }}">{{ i }}</a></li>
-                  {% endif %}
-                {% endfor %}
-                {% if paginator.has_next %}
-                  <li class="page-item"><a href="?page={{ paginator.next_page_number }}">&raquo;</a></li>
-                {% else %}
-                  <li class="page-item disabled"><span>&raquo;</span></li>
-                {% endif %}
-              </ul>
-            {% endif %}
+            </div>
         </div>
-    </div>
-    <div class="box">
+        <div class="box">
       <div class="box-header">
 
       </div>
@@ -102,7 +104,8 @@
 
       </div>
   </div>
-
+      </div>
+    </div>
   <div id="create_form" class="modal fade">
       <div class="modal-dialog" >
         <div class="modal-content">
